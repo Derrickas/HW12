@@ -30,41 +30,77 @@ function runSearch() {
         "View all empolyees",
         "View all employees by department",
         "View all employees by role",
-        "Add employee",
-        "Remove employee",
+        "add employee",
+        "remove employee",
         "update employee"
       ]
     })
     .then(function(answer) {
       switch (answer.action) {
       case "View all empolyees":
-        employeeSearch();
+        employeeTable();
         break;
 
       case "View all employees by department":
-        multiSearch();
+        departmentTable();
         break;
 
       case "View all employees by role" :
-        rangeSearch();
-        break;
-
-      case "add employee":
-        songSearch();
-        break;
-
-      case "remove Employee":
-        songAndAlbumSearch();
-        break;
-
-      case "Update Employee":
-        songAndAlbumSearch();
+        roleTable();
         break;  
+
+      case "add employee" :
+          addEmployee();
+          break;   
+          
+      case "remove employee" :
+          removeEmployee();
+          break;   
+          
+       case "update employee" :
+          updateEmployee();
+          break;  
       }
     });
 }
+function employeeTable() {
+  var employees = "SELECT * FROM employee";
+  connection.query(employees, (err, res )=>{
+    console.log (res);
+  })
+};
 
-function artistSearch() {
+function addEmployee() {
+  inquirer
+    .prompt([{
+      name: "firstname",
+      type: "input",
+      message: "What is the employees first name?"
+    },
+    {
+      name: "lastname",
+      type: "input",
+      message: "What is the employees last name?"
+    },
+    {
+      name: "role",
+      type: "input",
+      message: "What is the employees role?"
+    },
+    {
+      name: "manager",
+      type: "input",
+      message: "Who is the employees manager?"
+    }
+  ]).then(function(response) {
+    var query = `INSERT into employee ( firstname, lastname, role_id, manager_id) VALUES ( "${response.firstname}", "${response.lastname}", ${response.role}, ${response.manager})`;
+    connection.query(query, (err, res ) => {
+      if (err)console.log(err)
+    })
+  })
+};
+
+function employeesearch() {
   inquirer
     .prompt({
       name: "artist",
